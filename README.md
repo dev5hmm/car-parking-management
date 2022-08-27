@@ -9,9 +9,9 @@
 
 ## Installation
 
-Copy .env.example to .env
-#Set up database name and MAIL_USERNAME and MAIL_PASSWORD>
-#To generate MAIL_PASSWORD. <a href="https://support.google.com/accounts/answer/185833?hl=en">Click link</a>
+    Copy .env.example to .env
+    Set up database name and MAIL_USERNAME and MAIL_PASSWORD>
+    To generate MAIL_PASSWORD. <a href="https://support.google.com/accounts/answer/185833?hl=en">Click link</a>
 
 
 <h1>Commands</h1>
