@@ -26,11 +26,15 @@
                         <template #table-row="props">
                         <!-- Action Column -->
                         <div v-if="props.column.field == 'actions'">
-                            <Link :href="route('bookings.edit', {booking: props.row.id})" >
+                            <div v-if="!props.row.has_paid">
+                                <button @click="paid(props.row.id)" class="bg-red-500 text-white font-bold py-2 px-5 "> Paid</button>
+                                <Link :href="route('bookings.edit', {booking: props.row.id})" >
 
-                                <Button label="Edit" class="p-button-rounded p-button-secondary p-button-text p-mr-2"/>
-                            </Link>
-                            <button @click="deleteRecord(props.row.id)" class="bg-red-500 text-white font-bold py-2 px-5 "> Delete</button>
+                                    <Button label="Edit" class="bg-red-500 text-white font-bold py-2 px-4 my"/>
+                                </Link>
+                                <button @click="deleteRecord(props.row.id)" class="bg-red-500 text-white font-bold py-2 px-5 "> Delete</button>
+                            </div>
+
 
                         </div>
 
@@ -153,7 +157,7 @@ export default {
                     label: "Actions",
                     field: "actions",
                     sortable: false,
-                    width: "14rem",
+                    width: "16rem",
                 },
             ],
             options: {
@@ -230,6 +234,22 @@ export default {
                 acceptLabel: "Delete",
                 accept: () => {
                     this.$inertia.delete(route("bookings.destroy", { id: id }));
+                },
+                reject: () => {
+                    //callback to execute when user rejects the action
+                }
+            });
+        },
+        paid(id) {
+            this.$confirm.require({
+                message: 'Are you sure this customer paid the bill?.Be Aware. The paid record cannot be changed.',
+                header: 'Confirmation',
+                icon: "pi pi-info-circle",
+                acceptClass: "p-button-danger",
+                rejectLabel: "Cancel",
+                acceptLabel: "Confirm",
+                accept: () => {
+                    this.$inertia.patch(route("bookings.paid", { id: id }));
                 },
                 reject: () => {
                     //callback to execute when user rejects the action

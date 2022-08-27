@@ -25,6 +25,7 @@ class BookingResource extends JsonResource
             "duration" => $this->duration,
             "duration_type" => $this->duration_type,
             "total" => $this->total,
+            "has_paid" => $this->has_paid,
             "created_at" => date('Y-m-d H:i:s', strtotime($this->created_at)),
 
             "services" => ServiceResource::collection($this->whenLoaded('services')),

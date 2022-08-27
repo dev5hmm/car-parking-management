@@ -31,6 +31,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function() {
     })->name('dashboard');
 
     Route::resource('customers', CustomerCrudController::class);
+    Route::patch('bookings/{id}/paid', [BookingCrudController::class, 'paid'])->name('bookings.paid');
     Route::get('bookings/get-total-amount', [BookingCrudController::class, 'getTotalAmount'])->name('bookings.get-total-amount');
     Route::resource('bookings', BookingCrudController::class);
 });

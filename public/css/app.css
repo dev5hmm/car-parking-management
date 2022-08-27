@@ -1259,6 +1259,9 @@ select {
 .inline-flex {
 	display: inline-flex;
 }
+.table {
+	display: table;
+}
 .table-row {
 	display: table-row;
 }
@@ -1679,9 +1682,6 @@ select {
 }
 .bg-opacity-25 {
 	--tw-bg-opacity: 0.25;
-}
-.bg-opacity-10 {
-	--tw-bg-opacity: 0.1;
 }
 .bg-cover {
 	background-size: cover;

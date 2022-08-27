@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Filters\BookingFilters;
-use App\Http\Resources\BookingResource;
-use App\Http\Resources\CustomerResource;
-use App\Http\Resources\ServiceResource;
-use App\Models\Booking;
-use App\Models\BookingSetting;
-use App\Models\Customer;
-use App\Models\Service;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Booking;
+use App\Models\Service;
+use App\Models\Customer;
+use Illuminate\Http\Request;
+use App\Models\BookingSetting;
+use App\Filters\BookingFilters;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Resources\BookingResource;
+use App\Http\Resources\ServiceResource;
+use App\Http\Resources\CustomerResource;
+use App\Mail\MakeBooking;
+use App\Mail\PaidBooking;
 
 class BookingCrudController extends Controller
 {
@@ -89,6 +92,8 @@ class BookingCrudController extends Controller
             if($request->services) {
                 $booking->services()->sync($request->services);
             }
+            Mail::to(Customer::find($request->customer_id)->email)->send(new MakeBooking($booking));
+
             return redirect()->route('bookings.index')->with('successMessage', "Created Successfully");
         } else {
             $request->validate([
@@ -120,6 +125,8 @@ class BookingCrudController extends Controller
             if($request->services) {
                 $booking->services()->sync($request->services);
             }
+            Mail::to($user->email)->send(new MakeBooking($booking));
+
             return redirect()->route('bookings.index')->with('successMessage', "Created Successfully");
         }
 
@@ -129,6 +136,9 @@ class BookingCrudController extends Controller
     {
         // return $booking;
         $booking = Booking::where('id', $id)->with('services')->first();
+        if($booking->has_paid) {
+            return back()->with('errorMessage', "Cannot edit this record");
+        }
         // return new BookingResource($booking);
         return Inertia::render('Backend/Booking/Edit', [
             "booking" => new BookingResource($booking),
@@ -159,6 +169,7 @@ class BookingCrudController extends Controller
         if($request->services) {
             $booking->services()->sync($request->services);
         }
+
         return redirect()->route('bookings.index')->with('successMessage', "Updated Successfully");
     }
     public function getTotalDuration($duration, $type)
@@ -179,5 +190,16 @@ class BookingCrudController extends Controller
         $booking->services()->detach();
         $booking->delete();
         return back()->with('succesMessage', 'Successfully Deleted');
+    }
+    public function paid($id)
+    {
+        $booking = Booking::find($id);
+        $booking->has_paid = true;
+        $booking->save();
+        if($booking->customer) {
+            // dd("hello");
+            Mail::to($booking->customer->email)->send(new PaidBooking($booking));
+        }
+        return back()->with('successMessage', 'Successfully Saved');
     }
 }
