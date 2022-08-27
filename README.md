@@ -12,7 +12,15 @@
     Copy .env.example to .env
     Set up database name and MAIL_USERNAME and MAIL_PASSWORD>
     To generate MAIL_PASSWORD. <a href="https://support.google.com/accounts/answer/185833?hl=en">Click link</a>
-
+    Or You can use my keys
+    MAIL_MAILER=smtp
+    MAIL_HOST=smtp.gmail.com
+    MAIL_PORT=587
+    MAIL_USERNAME=dev222.hmm@gmail.com
+    MAIL_PASSWORD=atryqbtzwmezsgxp
+    MAIL_ENCRYPTION=tls
+    MAIL_FROM_ADDRESS=dev222.hmm@gmail.com
+    MAIL_FROM_NAME="${APP_NAME}"
 
 <h1>Commands</h1>
 
