@@ -32,6 +32,10 @@
     php artisan project:initiate
 </div>
 
+    User Credentials
+        Email : admin@gmail.com
+        Password: internet
+
 
 
 
